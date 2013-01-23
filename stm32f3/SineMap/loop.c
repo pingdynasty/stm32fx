@@ -11,8 +11,7 @@ volatile uint16_t multiplier = 1;
 
 #define BLOCK_SIZE			32 
 
-static void DAC_Config(void)
-{
+static void DAC_Config(void){
   DAC_InitTypeDef    DAC_InitStructure;
   GPIO_InitTypeDef   GPIO_InitStructure;
 
@@ -217,10 +216,8 @@ void PendSV_Handler(void){}
 void EXTI1_IRQHandler(void){}
 
 uint16_t capture = 0;
-void TIM3_IRQHandler(void)
-{
-  if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET)
-  {
+void TIM3_IRQHandler(void){
+  if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET){
     TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
     STM_EVAL_LEDToggle(LED5);
     capture = TIM_GetCapture1(TIM3);
@@ -228,8 +225,7 @@ void TIM3_IRQHandler(void)
   }
 }
 
-void ADC1_2_IRQHandler(void)
-{
+void ADC1_2_IRQHandler(void){
   if(ADC_GetITStatus(ADC1, ADC_IT_EOC) != RESET){
     /* Get converted value */
     uint16_t val = ADC_GetConversionValue(ADC1);
@@ -255,8 +251,7 @@ void ADC1_2_IRQHandler(void)
 
 void EXTI0_IRQHandler(void){
   __IO uint32_t DebounceDelay = 0;
- if ((EXTI_GetITStatus(USER_BUTTON_EXTI_LINE) == SET)&&(STM_EVAL_PBGetState(BUTTON_USER) != RESET))
-  {
+  if ((EXTI_GetITStatus(USER_BUTTON_EXTI_LINE) == SET)&&(STM_EVAL_PBGetState(BUTTON_USER) != RESET)){
     /* Delay */
     for(DebounceDelay=0; DebounceDelay<0x7FFFF; DebounceDelay++);
     

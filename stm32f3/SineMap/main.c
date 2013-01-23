@@ -1,27 +1,12 @@
 #include "main.h"
 
-/* Exported macro ------------------------------------------------------------*/
 #ifdef  USE_FULL_ASSERT
-/**
-  * @brief  The assert_param macro is used for function's parameters check.
-  * @param  expr: If expr is false, it calls assert_failed function which reports 
-  *         the name of the source file and the source line number of the call 
-  *         that failed. If expr is true, it returns no value.
-  * @retval None
-  */
-  #define assert_param(expr) ((expr) ? (void)0 : assert_failed((uint8_t *)__FILE__, __LINE__))
-/* Exported functions ------------------------------------------------------- */
-void assert_failed(uint8_t* file, uint32_t line)
-{ 
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* Infinite loop */
-  while (1)
-  {
-  }
+#define assert_param(expr) ((expr) ? (void)0 : assert_failed((uint8_t *)__FILE__, __LINE__))
+void assert_failed(uint8_t* file, uint32_t line) { 
+  for(;;);
 }
 #else
-  #define assert_param(expr) ((void)0)
+#define assert_param(expr) ((void)0)
 #endif /* USE_FULL_ASSERT */
 
 __IO uint32_t TimingDelay = 0;
@@ -30,8 +15,6 @@ void main(void){
   /*!< At this stage the microcontroller clock setting is already configured, 
   this is done through SystemInit() function which is called from startup
   file (startup_stm32f30x.s) before to branch to application main.
-  To reconfigure the default setting of SystemInit() function, refer to
-  system_stm32f30x.c file
   */
 
   /* Configures SysTick to be called every ms */
@@ -46,14 +29,12 @@ void main(void){
 
 void SysTick_Handler(void){
   if (TimingDelay != 0x00)
-  {
     TimingDelay--;
-  }
 }
 
 /**
   * @brief  Inserts a delay time.
-  * @param  nTime: specifies the delay time length, in 10 ms.
+  * @param  nTime: specifies the delay time length
   */
 void delay(__IO uint32_t nTime){
   TimingDelay = nTime;
