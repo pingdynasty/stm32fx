@@ -1,0 +1,35 @@
+# Library path
+LIBROOT=/Users/mars/devel/RebelTechnology/stm32f/STM32F0-Discovery_FW_V1.0.0
+
+# Code Paths
+DEVICE=$(LIBROOT)/Libraries/CMSIS/ST/STM32F0xx
+CORE=$(LIBROOT)/Libraries/CMSIS/Include
+PERIPH_FILE=$(LIBROOT)/Libraries/STM32F0xx_StdPeriph_Driver
+SYSTEM_FILE=$(LIBROOT)/Libraries/CMSIS/ST/STM32F0xx/Source/Templates
+STARTUP_FILE=$(LIBROOT)/Libraries/CMSIS/ST/STM32F0xx/Source/Templates/TrueSTUDIO
+DISCOVERY_FILE=$(LIBROOT)/Utilities/STM32F0-Discovery
+DEMO_FILE=$(LIBROOT)/Project/Demonstration
+DSPLIB=$(LIBROOT)/Libraries/CMSIS/DSP_Lib/Source
+
+#  Processor specific
+LDSCRIPT = $(DEMO_FILE)/TrueSTUDIO/STM32F0-Discovery_Demo/stm32_flash.ld
+STARTUP = startup_stm32f0xx.o system_stm32f0xx.o
+DISCOVERY = stm32f0_discovery.o
+PERIPH = stm32f0xx_gpio.o stm32f0xx_adc.o stm32f0xx_rcc.o stm32f0xx_syscfg.o stm32f0xx_pwr.o stm32f0xx_exti.o stm32f0xx_misc.o stm32f0xx_comp.o stm32f0xx_dac.o stm32f0xx_tim.o stm32f0xx_dma.o
+SYSCALLS = $(DEMO_FILE)/TrueSTUDIO/Demo/syscalls.o
+DEMO = stm32f0xx_it.o
+
+# Compilation Flags
+FULLASSERT = -DUSE_FULL_ASSERT 
+ARCH_FLAGS = -mcpu=cortex-m0 -mthumb -march=armv6-m
+LDFLAGS+= -T$(LDSCRIPT) $(ARCH_FLAGS)
+CFLAGS+= $(ARCH_FLAGS) -DSTM32F0XX
+CFLAGS+= -I$(TEMPLATEROOT) -I$(DEVICE) -I$(CORE) -I$(PERIPH_FILE)/inc -I.
+CFLAGS+= -DUSE_STDPERIPH_DRIVER $(FULLASSERT) 
+CFLAGS+= -I$(DEVICE)/Include -I$(CORE)
+CFLAGS+= -I$(DISCOVERY_FILE)
+CFLAGS+= -I$(DEMO_FILE)
+CFLAGS+= -fno-builtin -std=c99
+CFLAGS+= -DARM_MATH_CM0
+
+include $(TEMPLATEROOT)/Makefile.common

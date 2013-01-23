@@ -1,0 +1,38 @@
+
+# Library path
+LIBROOT=/Users/mars/devel/RebelTechnology/stm32f/STM32F3-Discovery_FW_V1.1.0
+
+# Code Paths
+DEVICE=$(LIBROOT)/Libraries/CMSIS/Device/ST/STM32F30x
+CORE=$(LIBROOT)/Libraries/CMSIS/Include
+PERIPH_FILE=$(LIBROOT)/Libraries/STM32F30x_StdPeriph_Driver
+SYSTEM_FILE=$(LIBROOT)/Libraries/CMSIS/Device/ST/STM32F30x/Source/Templates
+STARTUP_FILE=$(LIBROOT)/Libraries/CMSIS/Device/ST/STM32F30x/Source/Templates/TrueSTUDIO
+DISCOVERY_FILE=$(LIBROOT)/Utilities/STM32F3_Discovery/
+DEMO_FILE=$(LIBROOT)/Project/Demonstration
+DSPLIB=$(LIBROOT)/Libraries/CMSIS/DSP_Lib/Source
+
+#  Processor specific
+
+LDSCRIPT = $(DEMO_FILE)/TrueSTUDIO/Demo/STM32_FLASH.ld
+STARTUP = startup_stm32f30x.o system_stm32f30x.o
+DISCOVERY = stm32f3_discovery.o # stm32f3_discovery_lsm303dlhc.o # stm32f3_discovery_l3gd20.o 
+PERIPH = stm32f30x_gpio.o stm32f30x_adc.o stm32f30x_rcc.o stm32f30x_syscfg.o stm32f30x_pwr.o stm32f30x_exti.o stm32f30x_misc.o stm32f30x_comp.o stm32f30x_dac.o stm32f30x_tim.o stm32f30x_dma.o
+SYSCALLS = $(DEMO_FILE)/TrueSTUDIO/Demo/syscalls.o
+DEMO = stm32f30x_it.o
+
+# Compilation Flags
+
+FULLASSERT = -DUSE_FULL_ASSERT 
+
+LDFLAGS+= -T$(LDSCRIPT) -mthumb -mcpu=cortex-m4
+CFLAGS+= -mcpu=cortex-m4 -mthumb 
+CFLAGS+= -I$(TEMPLATEROOT) -I$(DEVICE) -I$(CORE) -I$(PERIPH_FILE)/inc -I.
+CFLAGS+= -DUSE_STDPERIPH_DRIVER $(FULLASSERT) 
+CFLAGS+= -I$(DEVICE)/Include -I$(CORE)
+CFLAGS+= -I$(DISCOVERY_FILE)
+CFLAGS+= -I$(DEMO_FILE)
+CFLAGS+= -fno-builtin
+CFLAGS+= -DARM_MATH_CM4
+
+include $(TEMPLATEROOT)/Makefile.common

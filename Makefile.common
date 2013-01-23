@@ -1,0 +1,77 @@
+# name of executable
+ELF=$(notdir $(CURDIR)).elf                    
+BIN=$(notdir $(CURDIR)).bin
+
+# Tool path
+# TOOLROOT=/Users/mars/yagarto/yagarto-4.6.2/bin
+TOOLROOT=/Users/mars/sat/bin
+
+# Tools
+CC=$(TOOLROOT)/arm-none-eabi-gcc
+LD=$(TOOLROOT)/arm-none-eabi-gcc
+AR=$(TOOLROOT)/arm-none-eabi-ar
+AS=$(TOOLROOT)/arm-none-eabi-as
+# GDB=$(TOOLROOT)/arm-none-eabi-gdb
+GDB=$(TOOLROOT)/arm-none-eabi-gdbtui
+OBJCOPY=$(TOOLROOT)/arm-none-eabi-objcopy
+STFLASH=/Users/mars/devel/stlink/st-flash
+
+# Search path for standard files
+vpath %.c $(TEMPLATEROOT)
+
+# Search path for perpheral library
+vpath %.c $(CORE)
+vpath %.c $(PERIPH_FILE)/src
+vpath %.c $(PERIPH_FILE)/inc
+vpath %.c $(DEVICE)
+vpath %.c $(SYSTEM_FILE)
+vpath %.s $(STARTUP_FILE)
+vpath %.c $(DISCOVERY_FILE)
+# vpath %.c $(DEMO_FILE)
+# vpath %.c $(DSPLIB)
+
+# Build executable 
+$(ELF) : $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+
+# compile and generate dependency info
+%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -MM $(CFLAGS) $< > $*.d
+
+%.o: %.s
+	$(CC) -c $(CFLAGS) $< -o $@
+
+%.bin: %.elf
+	$(OBJCOPY) -O binary $< $@
+
+clean:
+	rm -f $(OBJS) $(OBJS:.o=.d) $(ELF) $(CLEANOTHER) $(BIN) gdbscript
+
+debug: $(ELF)
+	echo "target extended localhost:4242" > gdbscript
+	echo "load $(ELF)" >> gdbscript
+	$(GDB) -x gdbscript $(ELF)
+# 	bash -c "$(GDB) -x <(echo target extended localhost:4242) $(ELF)"
+
+download: $(BIN)
+	$(STFLASH) write $(BIN) 0x8000000
+
+upload: download
+
+etags:
+	find $(PERIPH_FILE) -type f -iname "*.[ch]" | xargs etags --append
+	find $(DEVICE) -type f -iname "*.[ch]" | xargs etags --append
+	find $(CORE) -type f -iname "*.[ch]" | xargs etags --append
+	find $(DISCOVERY_FILE) -type f -iname "*.[ch]" | xargs etags --append
+	find . -type f -iname "*.[ch]" | xargs etags --append
+
+all: $(ELF)
+
+# pull in dependencies
+-include $(OBJS:.o=.d)
+
+
+
+
+
