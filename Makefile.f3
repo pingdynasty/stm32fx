@@ -1,4 +1,3 @@
-
 # Library path
 LIBROOT=/Users/mars/devel/RebelTechnology/stm32f/STM32F3-Discovery_FW_V1.1.0
 
@@ -13,7 +12,6 @@ DEMO_FILE=$(LIBROOT)/Project/Demonstration
 DSPLIB=$(LIBROOT)/Libraries/CMSIS/DSP_Lib/Source
 
 #  Processor specific
-
 LDSCRIPT = $(DEMO_FILE)/TrueSTUDIO/Demo/STM32_FLASH.ld
 STARTUP = startup_stm32f30x.o system_stm32f30x.o
 DISCOVERY = stm32f3_discovery.o # stm32f3_discovery_lsm303dlhc.o # stm32f3_discovery_l3gd20.o 
@@ -22,17 +20,14 @@ SYSCALLS = $(DEMO_FILE)/TrueSTUDIO/Demo/syscalls.o
 DEMO = stm32f30x_it.o
 
 # Compilation Flags
-
-FULLASSERT = -DUSE_FULL_ASSERT 
-
 LDFLAGS+= -T$(LDSCRIPT) -mthumb -mcpu=cortex-m4
 CFLAGS+= -mcpu=cortex-m4 -mthumb 
 CFLAGS+= -I$(TEMPLATEROOT) -I$(DEVICE) -I$(CORE) -I$(PERIPH_FILE)/inc -I.
-CFLAGS+= -DUSE_STDPERIPH_DRIVER $(FULLASSERT) 
 CFLAGS+= -I$(DEVICE)/Include -I$(CORE)
 CFLAGS+= -I$(DISCOVERY_FILE)
 CFLAGS+= -I$(DEMO_FILE)
 CFLAGS+= -fno-builtin
-CFLAGS+= -DARM_MATH_CM4
+CFLAGS+= -DUSE_STDPERIPH_DRIVER -DUSE_FULL_ASSERT 
+CFLAGS+= -DARM_MATH_CM4 -DSTM32F30X
 
 include $(TEMPLATEROOT)/Makefile.common
