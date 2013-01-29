@@ -8,6 +8,7 @@ TOOLROOT=/Users/mars/sat/bin
 
 # Tools
 CC=$(TOOLROOT)/arm-none-eabi-gcc
+CXX=$(TOOLROOT)/arm-none-eabi-g++
 LD=$(TOOLROOT)/arm-none-eabi-gcc
 AR=$(TOOLROOT)/arm-none-eabi-ar
 AS=$(TOOLROOT)/arm-none-eabi-as
@@ -38,6 +39,10 @@ $(ELF) : $(OBJS)
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 	$(CC) -MM $(CFLAGS) $< > $*.d
+
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $< -o $@
+	$(CXX) -MM $(CXXFLAGS) $< > $*.d
 
 %.o: %.s
 	$(CC) -c $(CFLAGS) $< -o $@
