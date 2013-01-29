@@ -17,10 +17,8 @@ GDB=$(TOOLROOT)/arm-none-eabi-gdbtui
 OBJCOPY=$(TOOLROOT)/arm-none-eabi-objcopy
 STFLASH=/Users/mars/devel/stlink/st-flash
 
-# Search path for standard files
-vpath %.c $(TEMPLATEROOT)
-
-# Search path for perpheral library
+# Set up search path
+vpath %.c $(TEMPLATEROOT)/Libraries
 vpath %.c $(CORE)
 vpath %.c $(PERIPH_FILE)/src
 vpath %.c $(PERIPH_FILE)/inc

@@ -16,13 +16,13 @@ LDSCRIPT = $(DEMO_FILE)/TrueSTUDIO/STM32F0-Discovery_Demo/stm32_flash.ld
 STARTUP = startup_stm32f0xx.o system_stm32f0xx.o
 DISCOVERY = stm32f0_discovery.o
 PERIPH = stm32f0xx_gpio.o stm32f0xx_adc.o stm32f0xx_rcc.o stm32f0xx_syscfg.o stm32f0xx_pwr.o stm32f0xx_exti.o stm32f0xx_misc.o stm32f0xx_comp.o stm32f0xx_dac.o stm32f0xx_tim.o stm32f0xx_dma.o
-# SYSCALLS = $(DEMO_FILE)/TrueSTUDIO/Demo/syscalls.o
+SYSCALLS = libnosys_gnu.o # syscalls.o
 DEMO = stm32f0xx_it.o
 
 # Compilation Flags
 ARCH_FLAGS = -mcpu=cortex-m0 -mthumb -march=armv6-m
 DEF_FLAGS = -DUSE_STDPERIPH_DRIVER -DUSE_FULL_ASSERT -DSTM32F0XX -DARM_MATH_CM0
-INC_FLAGS = -I$(TEMPLATEROOT) -I$(DEVICE) -I$(CORE) -I$(PERIPH_FILE)/inc -I.
+INC_FLAGS = -I$(TEMPLATEROOT)/Libraries -I$(DEVICE) -I$(CORE) -I$(PERIPH_FILE)/inc -I.
 INC_FLAGS += -I$(DEVICE)/Include -I$(CORE)
 INC_FLAGS += -I$(DISCOVERY_FILE) -I$(DEMO_FILE)
 CFLAGS += $(ARCH_FLAGS) $(INC_FLAGS) $(DEF_FLAGS)
